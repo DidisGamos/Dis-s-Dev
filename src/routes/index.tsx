@@ -19,6 +19,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import logoImg from "@/assets/logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import p1 from "@/assets/project-1.jpg";
 import p2 from "@/assets/project-2.jpg";
@@ -49,7 +50,7 @@ export const Route = createFileRoute("/")({
 function Logo({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <img src="./src/assets/logo.png" alt="Dis's Dev Logo" className="w-10" />
+      <img src={logoImg} alt="Dis's Dev Logo" className="w-10" />
       <span className="text-lg font-semibold tracking-tight">
         Dis's <span className="text-brand">Dev</span>
       </span>
