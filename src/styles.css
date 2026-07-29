@@ -1,5 +1,4 @@
-@import "tailwindcss" source(none);
-@source "../src";
+@import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -42,13 +41,13 @@
   --radius: 0.75rem;
 
   /* Dark premium palette (default) */
-  --background: oklch(0.19 0.02 265); /* #111827 vibe */
+  --background: oklch(0.19 0.02 265);
   --foreground: oklch(0.98 0 0);
   --surface: oklch(0.23 0.02 265);
   --surface-2: oklch(0.27 0.02 265);
   --card: oklch(0.22 0.02 265);
   --card-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.85 0.17 90); /* #FACC15 */
+  --primary: oklch(0.85 0.17 90);
   --primary-foreground: oklch(0.19 0.02 265);
   --brand: oklch(0.85 0.17 90);
   --brand-foreground: oklch(0.19 0.02 265);
@@ -88,6 +87,31 @@
     background: var(--brand);
     color: var(--brand-foreground);
   }
+
+  /* Custom Dark Premium Scrollbar (Correction de la barre blanche native) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: oklch(0.16 0.02 265);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.35 0.02 265);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brand);
+  }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @utility glass {
@@ -112,6 +136,26 @@
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -127,6 +171,28 @@
 @utility animate-reveal {
   animation: reveal-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Scroll-triggered fade-in sections */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children animations */
+.fade-in-section.is-visible > .stagger-child {
+  animation: fade-in-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.fade-in-section.is-visible > .stagger-child:nth-child(1) { animation-delay: 0ms; }
+.fade-in-section.is-visible > .stagger-child:nth-child(2) { animation-delay: 100ms; }
+.fade-in-section.is-visible > .stagger-child:nth-child(3) { animation-delay: 200ms; }
+.fade-in-section.is-visible > .stagger-child:nth-child(4) { animation-delay: 300ms; }
+.fade-in-section.is-visible > .stagger-child:nth-child(5) { animation-delay: 400ms; }
 
 .grid-bg {
   background-image:
