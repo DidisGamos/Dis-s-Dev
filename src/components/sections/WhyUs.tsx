@@ -1,5 +1,61 @@
+import { useEffect, useState, useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+
+function AnimatedMetric({ value }: { value: string }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  const numericMatch = value.match(/\d+/);
+  const targetNumber = numericMatch ? parseInt(numericMatch[0], 10) : null;
+
+  useEffect(() => {
+    if (targetNumber === null) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          const duration = 1600;
+          const startTime = performance.now();
+
+          const updateCount = (currentTime: number) => {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            const currentVal = Math.floor(easeProgress * targetNumber);
+
+            setCount(currentVal);
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCount);
+            } else {
+              setCount(targetNumber);
+            }
+          };
+
+          requestAnimationFrame(updateCount);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [targetNumber, hasAnimated]);
+
+  if (targetNumber === null) {
+    return <div>{value}</div>;
+  }
+
+  const formattedValue = hasAnimated ? value.replace(/\d+/, count.toString()) : value.replace(/\d+/, "0");
+
+  return <div ref={elementRef}>{formattedValue}</div>;
+}
 
 export function WhyUs() {
   const { t } = useLanguage();
@@ -43,7 +99,7 @@ export function WhyUs() {
                   className="text-4xl font-bold tracking-tight text-brand md:text-5xl"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
-                  {s.k}
+                  <AnimatedMetric value={s.k} />
                 </div>
                 <div className="mt-2 text-sm font-medium text-muted-foreground">{s.v}</div>
               </div>

@@ -68,6 +68,12 @@ export interface Translations {
     badge: string;
     title: string;
     subtitle: string;
+    items: Array<{
+      name: string;
+      role: string;
+      content: string;
+      rating: number;
+    }>;
   };
   contact: {
     badge: string;
@@ -93,6 +99,17 @@ export interface Translations {
   footer: {
     tagline: string;
     rights: string;
+  };
+  notFound: {
+    title: string;
+    desc: string;
+    backHome: string;
+  };
+  errorPage: {
+    title: string;
+    desc: string;
+    retry: string;
+    home: string;
   };
   bot: {
     welcome: string;
@@ -193,8 +210,8 @@ const translations: Record<Language, Translations> = {
       title: "Des projets pensés pour convertir.",
       subtitle: "Découvrez une sélection de nos réalisations web, mobiles et IA conçues pour booster la croissance de nos clients.",
       similarCta: "Discuter d'un projet similaire",
-      viewDetails: "Démo 360° & Détails",
-      demoTitle: "Démo Interactive 360°",
+      viewDetails: "En savoir plus",
+      demoTitle: "Détails du projet",
       deviceDesktop: "Écran Desktop",
       deviceMobile: "Vue Mobile",
       aboutProject: "À propos du projet",
@@ -209,6 +226,26 @@ const translations: Record<Language, Translations> = {
       badge: "Témoignages",
       title: "Ce que disent nos clients.",
       subtitle: "La satisfaction de nos partenaires est notre meilleure carte de visite.",
+      items: [
+        {
+          name: "Haja R.",
+          role: "CEO, Madagascar Logistics",
+          content: "Dis's Dev a transformé notre système de réservation web. Leur réactivité et leur maîtrise technique dépassent nos attentes. Une vraie équipe de pros !",
+          rating: 5,
+        },
+        {
+          name: "Sarah M.",
+          role: "Fondatrice, E-Shop Luxury",
+          content: "Notre taux de conversion a augmenté de 70% après la refonte UI/UX réalisée par Dis's Dev. Le site est d'une rapidité incroyable et très facile à utiliser.",
+          rating: 5,
+        },
+        {
+          name: "Jean-Philippe B.",
+          role: "CTO, FinTech Solution",
+          content: "L'intégration d'IA et l'automatisation de nos flux clients ont été gérées de main de maître. Un accompagnement 5 étoiles du début à la fin.",
+          rating: 5,
+        },
+      ],
     },
     contact: {
       badge: "Contact & Devis IA",
@@ -235,6 +272,17 @@ const translations: Record<Language, Translations> = {
     footer: {
       tagline: "De l'idée à la solution digitale. Agence web, mobile & IA basée à Toliara, Madagascar.",
       rights: "Dis's Dev. Tous droits réservés.",
+    },
+    notFound: {
+      title: "Page non trouvée",
+      desc: "La page que vous recherchez n'existe pas ou a été déplacée.",
+      backHome: "Retourner à l'accueil",
+    },
+    errorPage: {
+      title: "Une erreur est survenue",
+      desc: "Un problème est survenu lors du chargement. Vous pouvez réessayer ou revenir à l'accueil.",
+      retry: "Réessayer",
+      home: "Accueil",
     },
     bot: {
       welcome: "Bonjour ! Je suis DisBot (propulsé par Vercel AI SDK & Groq Llama 3.3 70B). Posez-moi vos questions sur nos services, nos tarifs ou votre futur projet !",
@@ -333,8 +381,8 @@ const translations: Record<Language, Translations> = {
       title: "Projects designed to convert.",
       subtitle: "Discover a selection of our web, mobile, and AI achievements built to drive client growth.",
       similarCta: "Discuss a similar project",
-      viewDetails: "360° Demo & Details",
-      demoTitle: "360° Interactive Demo",
+      viewDetails: "Learn More",
+      demoTitle: "Project Details",
       deviceDesktop: "Desktop View",
       deviceMobile: "Mobile View",
       aboutProject: "About the Project",
@@ -349,6 +397,26 @@ const translations: Record<Language, Translations> = {
       badge: "Testimonials",
       title: "What our clients say.",
       subtitle: "Our partners' satisfaction is our strongest endorsement.",
+      items: [
+        {
+          name: "Haja R.",
+          role: "CEO, Madagascar Logistics",
+          content: "Dis's Dev transformed our web booking system. Their responsiveness and technical expertise exceeded our expectations. A true team of professionals!",
+          rating: 5,
+        },
+        {
+          name: "Sarah M.",
+          role: "Founder, E-Shop Luxury",
+          content: "Our conversion rate increased by 70% after the UI/UX redesign by Dis's Dev. The site is incredibly fast and intuitive to use.",
+          rating: 5,
+        },
+        {
+          name: "Jean-Philippe B.",
+          role: "CTO, FinTech Solution",
+          content: "AI integration and workflow automation were expertly handled. 5-star support from start to finish.",
+          rating: 5,
+        },
+      ],
     },
     contact: {
       badge: "Contact & AI Quote",
@@ -375,6 +443,17 @@ const translations: Record<Language, Translations> = {
     footer: {
       tagline: "From idea to digital solution. Web, mobile & AI agency based in Toliara, Madagascar.",
       rights: "Dis's Dev. All rights reserved.",
+    },
+    notFound: {
+      title: "Page Not Found",
+      desc: "The page you are looking for does not exist or has been moved.",
+      backHome: "Back to Home",
+    },
+    errorPage: {
+      title: "An error occurred",
+      desc: "A problem occurred while loading. You can try again or return to home.",
+      retry: "Try Again",
+      home: "Home",
     },
     bot: {
       welcome: "Hello! I'm DisBot (powered by Vercel AI SDK & Groq Llama 3.3 70B). Ask me anything about our services, pricing, or your upcoming project!",

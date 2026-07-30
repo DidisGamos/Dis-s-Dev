@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ArrowRight, ExternalLink, Layers, Sparkles, CheckCircle2, Monitor, Smartphone, Eye, Play, Download } from "lucide-react";
-import p1 from "@/assets/project-1.jpg";
+import { ArrowRight, ExternalLink, Layers, Sparkles, CheckCircle2, Eye, Download } from "lucide-react";
+import safewayImg from "@/assets/safeway-plateform.vercel.app.png";
 import p2 from "@/assets/project-2.png";
-import p3 from "@/assets/project-3.jpg";
+import zotraImg from "@/assets/zotra-page.vercel.app.png";
 import p4 from "@/assets/project-4.jpg";
 import { useLanguage } from "@/lib/i18n";
 
@@ -30,21 +30,21 @@ export interface ProjectItem {
 
 export const projectsData: ProjectItem[] = [
   {
-    id: "saas-analytics",
-    img: p1,
-    title: "SaaS Analytics Dashboard",
+    id: "safeway",
+    img: safewayImg,
+    title: "SAFEWAY",
     cat: "Web Application",
-    shortDesc: "Plateforme d'analyse de données financières et de métriques en temps réel.",
+    shortDesc: "LIVE VERIFICATION NETWORK — Know your ride before you get in.",
     fullDesc:
-      "Conception et développement d'un tableau de bord de métriques avancées pour entreprises SaaS. Visualisations interactives de KPI, rapports automatisés et intégration multi-devises.",
-    techs: ["React 19", "TypeScript", "Recharts", "Tailwind CSS", "TanStack Query"],
+      "SAFEWAY est un réseau de vérification en direct pour la sécurité des transports. Scannez n'importe quelle plaque pour obtenir un score de sécurité instantané, partagez votre trajet en direct avec vos proches et déclenchez les secours en un seul clic — chaque trajet est vérifié.",
+    techs: ["React", "TypeScript", "Tailwind CSS", "Live Geolocation", "SOS Emergency Network"],
     features: [
-      "Tableaux de bord dynamiques temps réel",
-      "Exportation de rapports PDF/Excel en 1 clic",
-      "Gestion d'abonnements et facturation",
+      "Vérification instantanée de plaque : score de sécurité, note et historique chauffeur en direct",
+      "Partage de trajet en temps réel : itinéraire, chauffeur et heure d'arrivée transmises à vos proches",
+      "Urgence SOS en 1 clic : alerte instantanée avec position et détails du véhicule"
     ],
-    results: "+45% d'engagement utilisateur et temps de chargement divisé par 3.",
-    siteUrl: "#",
+    results: "10 000+ taxis vérifiés · 50 000+ passagers actifs · Réponse SOS 24/7",
+    siteUrl: "https://safeway-plateform.vercel.app/",
   },
   {
     id: "design-course",
@@ -64,21 +64,21 @@ export const projectsData: ProjectItem[] = [
     apkUrl: "https://drive.google.com/file/d/1Wk1hcRyPRFGDMdfuBegWRun7aoCui-DG/view?usp=sharing",
   },
   {
-    id: "retail-commerce",
-    img: p3,
-    title: "Retail Commerce Omnicanal",
-    cat: "E-commerce",
-    shortDesc: "Boutique en ligne haut de gamme avec système de paiement et gestion de stock.",
+    id: "zotra",
+    img: zotraImg,
+    title: "Zotra",
+    cat: "Transport & Mobilité",
+    shortDesc: "Nouvelle mobilité à Toliara — Déplacez-vous à Toliara avec confiance.",
     fullDesc:
-      "Plateforme E-commerce sur-mesure conçue pour une marque de distribution locale et internationale. Fluidité d'achat mobile-first, recherche instantanée et intégration paiement sécurisé.",
-    techs: ["Next.js", "Tailwind CSS", "Stripe API", "PostgreSQL", "Prisma"],
+      "Zotra est la solution de mobilité intelligente développée pour Toliara, Madagascar. Que ce soit pour l'université, le travail ou l'aéroport, réservez votre transport en 4 étapes simples (Demande -> Examen -> Assignation chauffeur -> Trajet) avec validation réactive et support 24/7.",
+    techs: ["React", "TypeScript", "Tailwind CSS", "Android APK", "Web & Mobile App"],
     features: [
-      "Panier d'achat ultra-fluide sans rechargement",
-      "Paiements locaux & internationaux",
-      "Synchronisation automatique du stock",
+      "Réservation rapide : réservez votre transport en quelques secondes depuis votre smartphone",
+      "Service fiable & examiné : demande validée par notre équipe avec réponse en < 5 min",
+      "Conçu pour Toliara : développé spécifiquement pour les besoins locaux de transport à Madagascar"
     ],
-    results: "+80% de taux de conversion sur mobile et hausse du panier moyen.",
-    siteUrl: "#",
+    results: "100% Fiable · 24/7 Disponible · Support < 5 min · Présence locale à Toliara",
+    siteUrl: "https://zotra-page.vercel.app/",
   },
   {
     id: "ai-dashboard",
@@ -101,9 +101,14 @@ export const projectsData: ProjectItem[] = [
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
-  const [deviceMode, setDeviceMode] = useState<"desktop" | "mobile">("desktop");
-  const [activeFeatureIndex, setActiveFeatureIndex] = useState<number>(0);
-  const { t } = useLanguage();
+  const [activeCategory, setActiveCategory] = useState<string>("Tous");
+  const { lang, t } = useLanguage();
+
+  const categories = ["Tous", "Web Application", "Mobile App", "Transport & Mobilité", "SaaS Platform"];
+
+  const filteredProjects = activeCategory === "Tous"
+    ? projectsData
+    : projectsData.filter((p) => p.cat === activeCategory);
 
   return (
     <section id="projets" className="relative py-24 md:py-32" aria-label="Nos réalisations">
@@ -129,21 +134,36 @@ export function Projects() {
           </a>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {projectsData.map((p) => (
+        {/* Filtres de catégorie de projets */}
+        <div className="mt-8 flex flex-wrap items-center gap-2">
+          {categories.map((cat) => {
+            const label = cat === "Tous" ? (lang === "fr" ? "Tous les projets" : "All Projects") : cat;
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
+                  isActive
+                    ? "bg-brand text-brand-foreground shadow-md"
+                    : "border border-border bg-surface/60 text-muted-foreground hover:border-brand/40 hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          {filteredProjects.map((p) => (
             <div
               key={p.id}
-              onClick={() => {
-                setSelectedProject(p);
-                setDeviceMode("desktop");
-                setActiveFeatureIndex(0);
-              }}
+              onClick={() => setSelectedProject(p)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   setSelectedProject(p);
-                  setDeviceMode("desktop");
-                  setActiveFeatureIndex(0);
                 }
               }}
               role="button"
@@ -205,7 +225,7 @@ export function Projects() {
                 </div>
                 <div className="flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3 py-1.5 text-xs font-semibold text-brand backdrop-blur transition-all group-hover:bg-brand group-hover:text-brand-foreground">
                   <Eye className="h-3.5 w-3.5" />
-                  <span>360°</span>
+                  <span>{t.projects.viewDetails}</span>
                 </div>
               </div>
             </div>
@@ -213,7 +233,7 @@ export function Projects() {
         </div>
       </div>
 
-      {/* Modal Démo Interactive 360° du projet */}
+      {/* Modal Détails du projet */}
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
         <DialogContent className="max-w-3xl border-border bg-background p-6 md:p-8 max-h-[90vh] overflow-y-auto">
           {selectedProject && (
@@ -236,114 +256,21 @@ export function Projects() {
               </DialogHeader>
 
               <div className="mt-4 space-y-6">
-                {/* Controls du Mode Démo Interactive (Desktop / Mobile Switcher) */}
-                <div className="flex items-center justify-between rounded-xl border border-border bg-surface/50 p-2">
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => setDeviceMode("desktop")}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                        deviceMode === "desktop"
-                          ? "bg-brand text-brand-foreground shadow-md"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <Monitor className="h-3.5 w-3.5" /> {t.projects.deviceDesktop}
-                    </button>
-                    <button
-                      onClick={() => setDeviceMode("mobile")}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-                        deviceMode === "mobile"
-                          ? "bg-brand text-brand-foreground shadow-md"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <Smartphone className="h-3.5 w-3.5" /> {t.projects.deviceMobile}
-                    </button>
-                  </div>
 
-                  <span className="hidden text-[11px] text-muted-foreground sm:flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 text-brand" /> Mode Démo 360° Interactif
-                  </span>
-                </div>
-
-                {/* Zone de démonstration responsive interactive avec mockup */}
-                <div className="relative flex items-center justify-center overflow-hidden rounded-2xl border border-border bg-slate-950/80 p-4 min-h-[260px] md:min-h-[320px]" style={{ perspective: "1200px" }}>
-                  {/* Desktop mockup */}
-                  <div
-                    className="w-full overflow-hidden rounded-lg border border-slate-800 shadow-2xl"
-                    style={{
-                      transition: "all 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
-                      opacity: deviceMode === "desktop" ? 1 : 0,
-                      transform: deviceMode === "desktop"
-                        ? "rotateY(0deg) scale(1)"
-                        : "rotateY(-25deg) scale(0.8)",
-                      position: deviceMode === "desktop" ? "relative" : "absolute",
-                      pointerEvents: deviceMode === "desktop" ? "auto" : "none",
-                      filter: deviceMode === "desktop" ? "blur(0px)" : "blur(6px)",
-                    }}
-                  >
-                    {/* En-tête navigateur virtuel */}
-                    <div className="flex items-center gap-1.5 border-b border-slate-800 bg-slate-900 px-3 py-2 text-xs text-slate-400">
-                      <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
-                      <span className="ml-2 truncate font-mono text-[10px] text-slate-500">
-                        https://demo.dis-dev.mg/projects/{selectedProject.id}
-                      </span>
-                    </div>
-                    <img
-                      src={selectedProject.img}
-                      alt={selectedProject.title}
-                      className="h-56 w-full object-cover transition-transform duration-500 hover:scale-105 md:h-64"
-                    />
-                  </div>
-
-                  {/* Mobile mockup */}
-                  <div
-                    className="relative mx-auto w-56 overflow-hidden rounded-[32px] border-4 border-slate-800 bg-black p-1 shadow-2xl"
-                    style={{
-                      transition: "all 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
-                      opacity: deviceMode === "mobile" ? 1 : 0,
-                      transform: deviceMode === "mobile"
-                        ? "rotateY(0deg) scale(1)"
-                        : "rotateY(25deg) scale(0.8)",
-                      position: deviceMode === "mobile" ? "relative" : "absolute",
-                      pointerEvents: deviceMode === "mobile" ? "auto" : "none",
-                      filter: deviceMode === "mobile" ? "blur(0px)" : "blur(6px)",
-                    }}
-                  >
-                    <div className="absolute top-2 left-1/2 h-3.5 w-20 -translate-x-1/2 rounded-full bg-slate-800 z-10" />
-                    <img
-                      src={selectedProject.img}
-                      alt={selectedProject.title}
-                      className="h-80 w-full rounded-[24px] object-cover"
-                    />
-                  </div>
-                </div>
-
-                {/* Tour interactif des fonctionnalités 360° */}
+                {/* Liste des fonctionnalités clés */}
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-1">
-                    <Play className="h-3.5 w-3.5 text-brand" /> Tour des fonctionnalités 360°
+                  <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                    Fonctionnalités clés
                   </h4>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                    {selectedProject.features.map((feat, index) => (
-                      <button
+                  <div className="mt-3 grid gap-2.5">
+                    {selectedProject.features.map((feat) => (
+                      <div
                         key={feat}
-                        onClick={() => setActiveFeatureIndex(index)}
-                        className={`flex items-center gap-2 rounded-xl border p-3 text-left text-xs transition-all ${
-                          activeFeatureIndex === index
-                            ? "border-brand bg-brand/10 text-foreground font-semibold"
-                            : "border-border bg-surface text-muted-foreground hover:border-brand/40"
-                        }`}
+                        className="flex items-start gap-2.5 rounded-xl border border-border bg-surface p-3 text-xs text-foreground"
                       >
-                        <CheckCircle2
-                          className={`h-4 w-4 shrink-0 ${
-                            activeFeatureIndex === index ? "text-brand" : "text-muted-foreground/60"
-                          }`}
-                        />
-                        <span>{feat}</span>
-                      </button>
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-brand mt-0.5" />
+                        <span className="leading-relaxed">{feat}</span>
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -1,30 +1,6 @@
 import { Star, Quote } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
-const testimonials = [
-  {
-    name: "Haja R.",
-    role: "CEO, Madagascar Logistics",
-    content:
-      "Dis's Dev a transformé notre système de réservation web. Leur réactivité et leur maîtrise technique dépassent nos attentes. Une vraie équipe de pros !",
-    rating: 5,
-  },
-  {
-    name: "Sarah M.",
-    role: "Fondatrice, E-Shop Luxury",
-    content:
-      "Notre taux de conversion a augmenté de 70% après la refonte UI/UX réalisée par Dis's Dev. Le site est d'une rapidité incroyable et très facile à utiliser.",
-    rating: 5,
-  },
-  {
-    name: "Jean-Philippe B.",
-    role: "CTO, FinTech Solution",
-    content:
-      "L'intégration d'IA et l'automatisation de nos flux clients ont été gérées de main de maître. Un accompagnement 5 étoiles du début à la fin.",
-    rating: 5,
-  },
-];
-
 export function Testimonials() {
   const { t } = useLanguage();
 
@@ -45,7 +21,7 @@ export function Testimonials() {
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {testimonials.map((test) => (
+          {t.testimonials.items.map((test) => (
             <div
               key={test.name}
               className="relative flex flex-col justify-between rounded-2xl border border-border glass p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40"

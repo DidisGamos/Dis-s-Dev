@@ -9,6 +9,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { AiChatbot } from "@/components/AiChatbot";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { FadeInView } from "@/components/FadeInView";
 
 export const Route = createFileRoute("/")({
@@ -59,6 +60,8 @@ function LandingPage() {
       <Footer />
       {/* Widget Chatbot IA Flottant */}
       <AiChatbot />
+      {/* Bouton Retour en haut de page */}
+      <ScrollToTop />
     </div>
   );
 }

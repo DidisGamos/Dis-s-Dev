@@ -17,9 +17,9 @@ export function Footer() {
 
         <div className="flex items-center gap-3">
           {[
-            { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-            { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-            { icon: Github, href: "https://github.com/DidisGamos/Dis-s-Dev", label: "GitHub" },
+            { icon: Facebook, href: "https://www.facebook.com/DissDev", label: "Facebook" },
+            { icon: Linkedin, href: "https://www.linkedin.com/company/135854165/", label: "LinkedIn" },
+            { icon: Github, href: "https://github.com/DidisGamos", label: "GitHub" },
           ].map((s) => (
             <a
               key={s.label}

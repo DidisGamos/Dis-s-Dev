@@ -1,9 +1,17 @@
+import { useState, useEffect } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useLanguage } from "@/lib/i18n";
 
 export function Hero() {
   const { t } = useLanguage();
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setOffsetY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <section
@@ -11,8 +19,11 @@ export function Hero() {
       className="relative isolate overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32"
       aria-label="Section d'accueil"
     >
-      {/* Background image + overlays */}
-      <div className="absolute inset-0 -z-10">
+      {/* Background image + overlays avec parallaxe */}
+      <div
+        className="absolute inset-0 -z-10 transition-transform duration-75 ease-out"
+        style={{ transform: `translateY(${offsetY * 0.25}px)` }}
+      >
         <img
           src={heroBg}
           alt="Illustration technologique fond d'écran Dis's Dev"
