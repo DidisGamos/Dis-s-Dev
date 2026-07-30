@@ -61,6 +61,8 @@ export interface Translations {
     techUsed: string;
     impact: string;
     requestSimilar: string;
+    visitSite: string;
+    downloadApk: string;
   };
   testimonials: {
     badge: string;
@@ -200,6 +202,8 @@ const translations: Record<Language, Translations> = {
       techUsed: "Technologies utilisées",
       impact: "Impact & Résultats",
       requestSimilar: "Demander une étude similaire",
+      visitSite: "Visiter le site",
+      downloadApk: "Télécharger l'APK",
     },
     testimonials: {
       badge: "Témoignages",
@@ -338,6 +342,8 @@ const translations: Record<Language, Translations> = {
       techUsed: "Technologies Used",
       impact: "Impact & Results",
       requestSimilar: "Request Similar Project",
+      visitSite: "Visit Website",
+      downloadApk: "Download APK",
     },
     testimonials: {
       badge: "Testimonials",
