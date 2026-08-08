@@ -3,8 +3,8 @@ import { ArrowRight, ExternalLink, Layers, Sparkles, CheckCircle2, Eye, Download
 import safewayImg from "@/assets/safeway-plateform.vercel.app.png";
 import p2 from "@/assets/project-2.png";
 import zotraImg from "@/assets/zotra-page.vercel.app.png";
-import p4 from "@/assets/project-4.jpg";
-import { useLanguage } from "@/lib/i18n";
+import brandMarketImg from "@/assets/brand-market-one.vercel.app.png";
+import { useLanguage, type Language } from "@/lib/i18n";
 
 import {
   Dialog,
@@ -28,85 +28,151 @@ export interface ProjectItem {
   apkUrl?: string;
 }
 
-export const projectsData: ProjectItem[] = [
+export const getProjectsData = (lang: Language): ProjectItem[] => [
   {
     id: "safeway",
     img: safewayImg,
     title: "SAFEWAY",
-    cat: "Web Application",
-    shortDesc: "LIVE VERIFICATION NETWORK — Know your ride before you get in.",
+    cat: lang === "fr" ? "Web Application" : "Web Application",
+    shortDesc:
+      lang === "fr"
+        ? "RÉSEAU DE VÉRIFICATION EN DIRECT — Connaissez votre trajet avant d'y monter."
+        : "LIVE VERIFICATION NETWORK — Know your ride before you get in.",
     fullDesc:
-      "SAFEWAY est un réseau de vérification en direct pour la sécurité des transports. Scannez n'importe quelle plaque pour obtenir un score de sécurité instantané, partagez votre trajet en direct avec vos proches et déclenchez les secours en un seul clic — chaque trajet est vérifié.",
+      lang === "fr"
+        ? "SAFEWAY est un réseau de vérification en direct pour la sécurité des transports. Scannez n'importe quelle plaque pour obtenir un score de sécurité instantané, partagez votre trajet en direct avec vos proches et déclenchez les secours en un seul clic — chaque trajet est vérifié."
+        : "SAFEWAY is a live transit safety verification network. Scan any vehicle license plate for instant safety scores, share live trips with loved ones, and trigger emergency support with one click — every ride verified.",
     techs: ["React", "TypeScript", "Tailwind CSS", "Live Geolocation", "SOS Emergency Network"],
-    features: [
-      "Vérification instantanée de plaque : score de sécurité, note et historique chauffeur en direct",
-      "Partage de trajet en temps réel : itinéraire, chauffeur et heure d'arrivée transmises à vos proches",
-      "Urgence SOS en 1 clic : alerte instantanée avec position et détails du véhicule"
-    ],
-    results: "10 000+ taxis vérifiés · 50 000+ passagers actifs · Réponse SOS 24/7",
+    features:
+      lang === "fr"
+        ? [
+            "Vérification instantanée de plaque : score de sécurité, note et historique chauffeur en direct",
+            "Partage de trajet en temps réel : itinéraire, chauffeur et heure d'arrivée transmises à vos proches",
+            "Urgence SOS en 1 clic : alerte instantanée avec position et détails du véhicule",
+          ]
+        : [
+            "Instant License Plate Verification: live safety score, ratings & driver history",
+            "Real-time Trip Sharing: route, driver & ETA sent to your loved ones",
+            "1-Click SOS Emergency: instant alert with live GPS position and vehicle info",
+          ],
+    results:
+      lang === "fr"
+        ? "10 000+ taxis vérifiés · 50 000+ passagers actifs · Réponse SOS 24/7"
+        : "10,000+ taxis verified · 50,000+ active users · 24/7 SOS response",
     siteUrl: "https://safeway-plateform.vercel.app/",
   },
   {
     id: "design-course",
     img: p2,
     title: "Design Course",
-    cat: "Mobile App",
-    shortDesc: "Application mobile d'apprentissage du design UI/UX avec cours interactifs et certifications.",
+    cat: lang === "fr" ? "Mobile App" : "Mobile App",
+    shortDesc:
+      lang === "fr"
+        ? "Application mobile d'apprentissage du design UI/UX avec cours interactifs et certifications."
+        : "Mobile learning platform for UI/UX design with interactive courses and certifications.",
     fullDesc:
-      "Une application mobile éducative complète dédiée à l'apprentissage du design UI/UX. Elle propose des parcours de formation structurés, des cours vidéo HD, des exercices pratiques interactifs, un système de progression avec badges et certifications, ainsi qu'une communauté intégrée pour échanger entre apprenants et mentors.",
+      lang === "fr"
+        ? "Une application mobile éducative complète dédiée à l'apprentissage du design UI/UX. Elle propose des parcours de formation structurés, des cours vidéo HD, des exercices pratiques interactifs, un système de progression avec badges et certifications, ainsi qu'une communauté intégrée pour échanger entre apprenants et mentors."
+        : "A comprehensive mobile educational app dedicated to UI/UX design learning. It offers structured training tracks, HD video courses, interactive exercises, gamified badges and certificates, and a built-in community connecting learners with mentors.",
     techs: ["React Native", "TypeScript", "Firebase", "Expo", "Lottie Animations"],
-    features: [
-      "Cours vidéo HD avec progression personnalisée",
-      "Exercices pratiques et quiz interactifs",
-      "Système de badges, certifications et classements",
-    ],
-    results: "+10k apprenants actifs et taux de complétion de 78% sur les parcours.",
+    features:
+      lang === "fr"
+        ? [
+            "Cours vidéo HD avec progression personnalisée",
+            "Exercices pratiques et quiz interactifs",
+            "Système de badges, certifications et classements",
+          ]
+        : [
+            "HD video courses with personalized progress tracking",
+            "Hands-on exercises and interactive quizzes",
+            "Badges, certificates, and leaderboard ranking system",
+          ],
+    results:
+      lang === "fr"
+        ? "+10k apprenants actifs et taux de complétion de 78% sur les parcours."
+        : "+10k active learners with a 78% course completion rate.",
     apkUrl: "https://drive.google.com/file/d/1Wk1hcRyPRFGDMdfuBegWRun7aoCui-DG/view?usp=sharing",
   },
   {
     id: "zotra",
     img: zotraImg,
     title: "Zotra",
-    cat: "Transport & Mobilité",
-    shortDesc: "Nouvelle mobilité à Toliara — Déplacez-vous à Toliara avec confiance.",
+    cat: lang === "fr" ? "Transport & Mobilité" : "Transport & Mobility",
+    shortDesc:
+      lang === "fr"
+        ? "Nouvelle mobilité à Toliara — Déplacez-vous à Toliara avec confiance."
+        : "Next-gen mobility in Toliara — Move around Toliara with complete confidence.",
     fullDesc:
-      "Zotra est la solution de mobilité intelligente développée pour Toliara, Madagascar. Que ce soit pour l'université, le travail ou l'aéroport, réservez votre transport en 4 étapes simples (Demande -> Examen -> Assignation chauffeur -> Trajet) avec validation réactive et support 24/7.",
+      lang === "fr"
+        ? "Zotra est la solution de mobilité intelligente développée pour Toliara, Madagascar. Que ce soit pour l'université, le travail ou l'aéroport, réservez votre transport en 4 étapes simples (Demande -> Examen -> Assignation chauffeur -> Trajet) avec validation réactive et support 24/7."
+        : "Zotra is the smart mobility platform built for Toliara, Madagascar. Whether for university, work, or airport transfers, book your trip in 4 easy steps (Request -> Review -> Driver Assignment -> Trip) with fast approval and 24/7 support.",
     techs: ["React", "TypeScript", "Tailwind CSS", "Android APK", "Web & Mobile App"],
-    features: [
-      "Réservation rapide : réservez votre transport en quelques secondes depuis votre smartphone",
-      "Service fiable & examiné : demande validée par notre équipe avec réponse en < 5 min",
-      "Conçu pour Toliara : développé spécifiquement pour les besoins locaux de transport à Madagascar"
-    ],
-    results: "100% Fiable · 24/7 Disponible · Support < 5 min · Présence locale à Toliara",
+    features:
+      lang === "fr"
+        ? [
+            "Réservation rapide : réservez votre transport en quelques secondes depuis votre smartphone",
+            "Service fiable & examiné : demande validée par notre équipe avec réponse en < 5 min",
+            "Conçu pour Toliara : développé spécifiquement pour les besoins locaux de transport à Madagascar",
+          ]
+        : [
+            "Fast booking: reserve transit in seconds right from your mobile device",
+            "Reliable & reviewed service: trip request validated by team within < 5 min",
+            "Built for Toliara: specifically crafted for Madagascar's local transit needs",
+          ],
+    results:
+      lang === "fr"
+        ? "100% Fiable · 24/7 Disponible · Support < 5 min · Présence locale à Toliara"
+        : "100% Reliable · 24/7 Available · < 5 min Support · Local presence in Toliara",
     siteUrl: "https://zotra-page.vercel.app/",
   },
   {
-    id: "ai-dashboard",
-    img: p4,
-    title: "AI Automation Platform",
-    cat: "SaaS Platform",
-    shortDesc: "Plateforme SaaS d'automatisation des tâches et d'analyse prédictive IA.",
+    id: "brand-market",
+    img: brandMarketImg,
+    title: "Brand Market",
+    cat: lang === "fr" ? "E-Commerce & B2B" : "E-Commerce & B2B",
+    shortDesc:
+      lang === "fr"
+        ? "Marketplace B2B & B2C internationale — Sourcing direct usine, devis RFQ et fabricants vérifiés."
+        : "Global B2B & B2C Marketplace — Direct factory sourcing, RFQ quotes & verified suppliers.",
     fullDesc:
-      "Solution d'intelligence artificielle automatisant le traitement documentaire, le tri des requêtes clients et la génération de synthèses stratégiques pour entreprises.",
-    techs: ["React 19", "Python / FastAPI", "OpenAI / Claude API", "Tailwind v4"],
-    features: [
-      "Analyse automatique de documents PDF/Word",
-      "Génération de compte-rendus intelligents",
-      "Workflows personnalisables",
-    ],
-    results: "+300 heures de travail manuel économisées chaque mois.",
-    siteUrl: "#",
+      lang === "fr"
+        ? "Brand Market est une marketplace e-commerce globale connectant les acheteurs et les fournisseurs mondiaux. La plateforme intègre la soumission de demandes de devis usine (RFQ), le marquage OEM personnalisé, un programme de Garantie Commerciale pour protéger les transactions et le suivi d'expédition internationale en temps réel."
+        : "Brand Market is a global e-commerce marketplace connecting international buyers and verified suppliers. The platform features direct factory quotation requests (RFQ), custom OEM logo branding, secure Trade Assurance for order protection, and real-time international shipment tracking.",
+    techs: ["React / Next.js", "TypeScript", "Tailwind CSS", "Vercel", "B2B RFQ Engine", "Global Trade"],
+    features:
+      lang === "fr"
+        ? [
+            "Demandes de devis direct usine (RFQ) et personnalisation de logo OEM",
+            "Garantie Commerciale & protection des commandes auprès de fabricants vérifiés",
+            "Catalogue multi-catégories, remises groupées B2B (-15% Extra) et promos déstockage",
+          ]
+        : [
+            "Direct factory quotation requests (RFQ) and custom OEM logo branding",
+            "Trade Assurance & order protection with verified global manufacturers",
+            "Multi-category catalog, B2B bulk order discounts (-15% Extra), and clearance deals",
+          ],
+    results:
+      lang === "fr"
+        ? "+500 fabricants vérifiés · Offres B2B exclusives · Expédition mondiale 24/7"
+        : "500+ verified suppliers · Exclusive B2B deals · 24/7 express global shipping",
+    siteUrl: "https://brand-market-one.vercel.app/",
   },
 ];
 
 export function Projects() {
+  const { lang, t } = useLanguage();
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("Tous");
-  const { lang, t } = useLanguage();
 
-  const categories = ["Tous", "Web Application", "Mobile App", "Transport & Mobilité", "SaaS Platform"];
+  const projectsData = getProjectsData(lang);
 
-  const filteredProjects = activeCategory === "Tous"
+  const categories = lang === "fr"
+    ? ["Tous", "Web Application", "Mobile App", "Transport & Mobilité", "E-Commerce & B2B"]
+    : ["All", "Web Application", "Mobile App", "Transport & Mobility", "E-Commerce & B2B"];
+
+  const allCategoryLabel = lang === "fr" ? "Tous" : "All";
+
+  const filteredProjects = (activeCategory === "Tous" || activeCategory === "All")
     ? projectsData
     : projectsData.filter((p) => p.cat === activeCategory);
 
@@ -137,12 +203,14 @@ export function Projects() {
         {/* Filtres de catégorie de projets */}
         <div className="mt-8 flex flex-wrap items-center gap-2">
           {categories.map((cat) => {
-            const label = cat === "Tous" ? (lang === "fr" ? "Tous les projets" : "All Projects") : cat;
-            const isActive = activeCategory === cat;
+            const label = (cat === "Tous" || cat === "All")
+              ? (lang === "fr" ? "Tous les projets" : "All Projects")
+              : cat;
+            const isActive = activeCategory === cat || ((cat === "Tous" || cat === "All") && (activeCategory === "Tous" || activeCategory === "All"));
             return (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => setActiveCategory(cat === "Tous" || cat === "All" ? allCategoryLabel : cat)}
                 className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
                   isActive
                     ? "bg-brand text-brand-foreground shadow-md"
@@ -260,7 +328,7 @@ export function Projects() {
                 {/* Liste des fonctionnalités clés */}
                 <div>
                   <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    Fonctionnalités clés
+                    {t.projects.keyFeatures}
                   </h4>
                   <div className="mt-3 grid gap-2.5">
                     {selectedProject.features.map((feat) => (
