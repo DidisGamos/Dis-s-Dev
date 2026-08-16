@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { getProjects, upsertProject, deleteProject } from "@/lib/admin-actions";
-import { uploadToCloudinary } from "@/lib/cloudinary-action";
+import { uploadToCloudinary, getCloudinarySignature } from "@/lib/cloudinary-action";
 import {
   Dialog,
   DialogContent,
@@ -122,29 +122,62 @@ function AdminProjects() {
     }
 
     setUploadingImage(true);
+    const toastId = toast.loading("Envoi de l'image vers Cloudinary...");
+
     try {
-      // Convert to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        try {
-          const base64 = reader.result as string;
-          const res = await uploadToCloudinary({
-            data: { file: base64, folder: "dis-dev-cms/projects" },
-          });
-          setForm((f) => ({ ...f, imageUrl: res.url }));
-          toast.success("Image uploadée sur Cloudinary avec succès !");
-        } catch (err) {
-          console.error(err);
-          toast.error("Erreur lors de l'upload vers Cloudinary");
-        } finally {
-          setUploadingImage(false);
-        }
-      };
-    } catch (err) {
-      console.error(err);
+      // 1. Obtenir la signature sécurisée côté serveur
+      const sig = await getCloudinarySignature({
+        data: { folder: "dis-dev-cms/projects" },
+      });
+
+      // 2. Upload direct du fichier Blob vers l'API Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", sig.apiKey);
+      formData.append("timestamp", sig.timestamp);
+      formData.append("signature", sig.signature);
+      formData.append("folder", sig.folder);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
+        { method: "POST", body: formData }
+      );
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Direct upload failed, attempting fallback:", errText);
+        throw new Error(errText);
+      }
+
+      const result = (await response.json()) as { secure_url: string };
+      setForm((f) => ({ ...f, imageUrl: result.secure_url }));
+      toast.success("Image uploadée sur Cloudinary avec succès !", { id: toastId });
       setUploadingImage(false);
-      toast.error("Erreur de lecture de l'image");
+    } catch (directErr) {
+      console.warn("Direct upload failed, using server fallback...", directErr);
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+          try {
+            const base64 = reader.result as string;
+            const res = await uploadToCloudinary({
+              data: { file: base64, folder: "dis-dev-cms/projects" },
+            });
+            setForm((f) => ({ ...f, imageUrl: res.url }));
+            toast.success("Image uploadée sur Cloudinary avec succès !", { id: toastId });
+          } catch (serverErr) {
+            console.error("Server fallback error:", serverErr);
+            toast.error("Erreur lors de l'upload vers Cloudinary", { id: toastId });
+          } finally {
+            setUploadingImage(false);
+          }
+        };
+      } catch (err) {
+        console.error(err);
+        setUploadingImage(false);
+        toast.error("Erreur de lecture de l'image", { id: toastId });
+      }
     }
   };
 
