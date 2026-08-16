@@ -4,6 +4,7 @@ import safewayImg from "@/assets/safeway-plateform.vercel.app.png";
 import p2 from "@/assets/project-2.png";
 import zotraImg from "@/assets/zotra-page.vercel.app.png";
 import brandMarketImg from "@/assets/brand-market-one.vercel.app.png";
+import maisonSavannaImg from "@/assets/m-savana.vercel.app.png";
 import { useLanguage, type Language } from "@/lib/i18n";
 
 import {
@@ -29,6 +30,38 @@ export interface ProjectItem {
 }
 
 export const getProjectsData = (lang: Language): ProjectItem[] => [
+  {
+    id: "maison-savanna",
+    img: maisonSavannaImg,
+    title: "Maison Savanna",
+    cat: lang === "fr" ? "Gastronomie & Luxe" : "Gastronomy & Luxury",
+    shortDesc:
+      lang === "fr"
+        ? "Restaurant gastronomique à Toliara — L'art de savourer autrement et haute cuisine contemporaine."
+        : "Fine dining restaurant in Toliara — Contemporary haute cuisine & wild treasures of Madagascar.",
+    fullDesc:
+      lang === "fr"
+        ? "Maison Savanna est une table gastronomique contemporaine d'exception située face au lagon de la Baie de Saint-Augustin à Toliara. Le site offre une immersion sensorielle complète : découverte de la philosophie du Chef Exécutif Andry Ravelojaona, consultation interactive de la carte & plats signatures (Filet de Zébu au Voatsiperifery, Crevettes flambées au Dzama), exploration des espaces raffinés (Le Grand Restaurant, Terrasse du Lagon, Chef's Table) et réservation de table en ligne avec conciergerie intégrée."
+        : "Maison Savanna is an exceptional fine dining restaurant located along the lagoon in Saint-Augustin Bay, Toliara. The website provides a complete sensory immersion: exploring Executive Chef Andry Ravelojaona's culinary philosophy, interactive signature dishes & menus, exploring exclusive dining spaces (Grand Restaurant, Lagoon Terrace, Chef's Table), and seamless online table reservation with dedicated concierge support.",
+    techs: ["React / Next.js", "TypeScript", "Tailwind CSS", "Vercel", "Design UI/UX Luxe", "Online Booking"],
+    features:
+      lang === "fr"
+        ? [
+            "Système de réservation de table en ligne & service conciergerie haut de gamme",
+            "Carte gastronomique interactive : plats signatures, accords mets & vins et valorisation du terroir malgache",
+            "Immersion visuelle & espaces : Le Grand Restaurant, Terrasse du Lagon, Chef's Table (8 couverts) & Salon privé",
+          ]
+        : [
+            "Online table reservation system & VIP concierge service",
+            "Interactive gourmet menu: signature dishes, wine pairings & Malagasy local terroir highlights",
+            "Visual immersion & venue spaces: Main Dining Room, Lagoon Terrace, Chef's Table & Private Lounge",
+          ],
+    results:
+      lang === "fr"
+        ? "85% Ingrédients locaux · Expérience digitale 5 étoiles · Réservation fluide 24/7"
+        : "85% Local farm-to-table sourcing · 5-star digital luxury experience · 24/7 seamless booking",
+    siteUrl: "https://m-savana.vercel.app/",
+  },
   {
     id: "safeway",
     img: safewayImg,
@@ -167,8 +200,8 @@ export function Projects() {
   const projectsData = getProjectsData(lang);
 
   const categories = lang === "fr"
-    ? ["Tous", "Web Application", "Mobile App", "Transport & Mobilité", "E-Commerce & B2B"]
-    : ["All", "Web Application", "Mobile App", "Transport & Mobility", "E-Commerce & B2B"];
+    ? ["Tous", "Gastronomie & Luxe", "Web Application", "Mobile App", "Transport & Mobilité", "E-Commerce & B2B"]
+    : ["All", "Gastronomy & Luxury", "Web Application", "Mobile App", "Transport & Mobility", "E-Commerce & B2B"];
 
   const allCategoryLabel = lang === "fr" ? "Tous" : "All";
 
