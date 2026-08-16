@@ -34,9 +34,17 @@ export function Footer() {
           ))}
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {t.footer.rights}
-        </p>
+        <div className="flex items-center gap-4">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} {t.footer.rights}
+          </p>
+          <a
+            href="/admin"
+            className="text-[11px] text-muted-foreground/60 transition-colors hover:text-brand hover:underline"
+          >
+            Admin
+          </a>
+        </div>
       </div>
     </footer>
   );

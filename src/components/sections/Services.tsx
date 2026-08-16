@@ -1,10 +1,59 @@
-import { Code2, Smartphone, Palette, TrendingUp, Bot, ChevronRight } from "lucide-react";
+import {
+  Code2,
+  Smartphone,
+  Palette,
+  TrendingUp,
+  Bot,
+  Globe,
+  Shield,
+  Zap,
+  Database,
+  Layout,
+  ChevronRight,
+  type LucideIcon,
+} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
+import { getPublicServices } from "@/lib/public-actions";
 
-const icons = [Code2, Smartphone, Palette, TrendingUp, Bot];
+const iconMap: Record<string, LucideIcon> = {
+  Code2,
+  Smartphone,
+  Palette,
+  TrendingUp,
+  Bot,
+  Globe,
+  Shield,
+  Zap,
+  Database,
+  Layout,
+};
+
+const defaultIconCycle = [Code2, Smartphone, Palette, TrendingUp, Bot];
 
 export function Services() {
   const { t } = useLanguage();
+
+  const { data: dbServices } = useQuery({
+    queryKey: ["public", "services"],
+    queryFn: () => getPublicServices(),
+  });
+
+  // Use dynamic DB services if available, otherwise fallback to i18n
+  const servicesList =
+    dbServices && dbServices.length > 0
+      ? dbServices.map((s) => ({
+          title: s.title,
+          desc: s.description,
+          details: s.details,
+          iconName: s.icon,
+        }))
+      : t.services.items.map((s) => ({
+          title: s.title,
+          desc: s.desc,
+          details: s.details,
+          iconName: "Code2",
+        }));
 
   return (
     <section id="services" className="relative py-24 md:py-32" aria-label="Nos services">
@@ -23,8 +72,10 @@ export function Services() {
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {t.services.items.map((s, i) => {
-            const IconComponent = icons[i % icons.length];
+          {servicesList.map((s, i) => {
+            const IconComponent =
+              iconMap[s.iconName] || defaultIconCycle[i % defaultIconCycle.length];
+
             return (
               <div
                 key={s.title}
@@ -35,7 +86,7 @@ export function Services() {
                   <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand/10 text-brand ring-1 ring-brand/20">
                     <IconComponent className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-5 text-xl font-semibold">{s.title}</h3>
+                  <h3 className="mt-5 text-xl font-semibold text-foreground">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
                   <ul className="mt-5 space-y-2 border-t border-border/60 pt-4">
                     {s.details.map((item) => (

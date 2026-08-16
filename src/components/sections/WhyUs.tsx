@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
+import { getPublicAdvantages, getPublicStats } from "@/lib/public-actions";
 
 function AnimatedMetric({ value }: { value: string }) {
   const [count, setCount] = useState(0);
@@ -60,6 +62,26 @@ function AnimatedMetric({ value }: { value: string }) {
 export function WhyUs() {
   const { t } = useLanguage();
 
+  const { data: dbAdvantages } = useQuery({
+    queryKey: ["public", "advantages"],
+    queryFn: () => getPublicAdvantages(),
+  });
+
+  const { data: dbStats } = useQuery({
+    queryKey: ["public", "stats"],
+    queryFn: () => getPublicStats(),
+  });
+
+  const advantagesList =
+    dbAdvantages && dbAdvantages.length > 0
+      ? dbAdvantages.map((a) => a.text)
+      : t.whyUs.advantages;
+
+  const metricsList =
+    dbStats && dbStats.length > 0
+      ? dbStats.map((s) => ({ k: s.value, v: s.label }))
+      : t.whyUs.metrics;
+
   return (
     <section id="apropos" className="relative py-24 md:py-32" aria-label="Pourquoi nous choisir">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -78,8 +100,8 @@ export function WhyUs() {
             </p>
 
             <ul className="mt-8 space-y-3.5">
-              {t.whyUs.advantages.map((a) => (
-                <li key={a} className="flex items-center gap-3">
+              {advantagesList.map((a, idx) => (
+                <li key={`${a}-${idx}`} className="flex items-center gap-3">
                   <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand/15 text-brand">
                     <CheckCircle2 className="h-4 w-4" />
                   </span>
@@ -90,9 +112,9 @@ export function WhyUs() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            {t.whyUs.metrics.map((s) => (
+            {metricsList.map((s, idx) => (
               <div
-                key={s.v}
+                key={`${s.v}-${idx}`}
                 className="rounded-2xl border border-border glass p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40"
               >
                 <div

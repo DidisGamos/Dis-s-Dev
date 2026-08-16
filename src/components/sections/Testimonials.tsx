@@ -1,8 +1,25 @@
 import { Star, Quote } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/i18n";
+import { getPublicTestimonials } from "@/lib/public-actions";
 
 export function Testimonials() {
   const { t } = useLanguage();
+
+  const { data: dbTestimonials } = useQuery({
+    queryKey: ["public", "testimonials"],
+    queryFn: () => getPublicTestimonials(),
+  });
+
+  const testimonialsList =
+    dbTestimonials && dbTestimonials.length > 0
+      ? dbTestimonials.map((item) => ({
+          name: item.name,
+          role: item.role,
+          content: item.content,
+          rating: item.rating,
+        }))
+      : t.testimonials.items;
 
   return (
     <section id="temoignages" className="relative py-24 md:py-32" aria-label="Avis et témoignages clients">
@@ -21,9 +38,9 @@ export function Testimonials() {
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {t.testimonials.items.map((test) => (
+          {testimonialsList.map((test, idx) => (
             <div
-              key={test.name}
+              key={`${test.name}-${idx}`}
               className="relative flex flex-col justify-between rounded-2xl border border-border glass p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40"
             >
               <div>

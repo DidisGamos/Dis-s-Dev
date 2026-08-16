@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { ArrowRight, ExternalLink, Layers, Sparkles, CheckCircle2, Eye, Download } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import safewayImg from "@/assets/safeway-plateform.vercel.app.png";
 import p2 from "@/assets/project-2.png";
 import zotraImg from "@/assets/zotra-page.vercel.app.png";
 import brandMarketImg from "@/assets/brand-market-one.vercel.app.png";
 import maisonSavannaImg from "@/assets/m-savana.vercel.app.png";
 import { useLanguage, type Language } from "@/lib/i18n";
+import { getPublicProjects } from "@/lib/public-actions";
 
 import {
   Dialog,
@@ -25,8 +27,8 @@ export interface ProjectItem {
   techs: string[];
   features: string[];
   results: string;
-  siteUrl?: string;
-  apkUrl?: string;
+  siteUrl?: string | null;
+  apkUrl?: string | null;
 }
 
 export const getProjectsData = (lang: Language): ProjectItem[] => [
@@ -197,17 +199,40 @@ export function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("Tous");
 
-  const projectsData = getProjectsData(lang);
+  const { data: dbProjects } = useQuery({
+    queryKey: ["public", "projects"],
+    queryFn: () => getPublicProjects(),
+  });
 
-  const categories = lang === "fr"
-    ? ["Tous", "Gastronomie & Luxe", "Web Application", "Mobile App", "Transport & Mobilité", "E-Commerce & B2B"]
-    : ["All", "Gastronomy & Luxury", "Web Application", "Mobile App", "Transport & Mobility", "E-Commerce & B2B"];
+  const staticProjects = getProjectsData(lang);
 
+  // Use dynamic DB projects if available, otherwise fallback to static projects
+  const projectsData: ProjectItem[] =
+    dbProjects && dbProjects.length > 0
+      ? dbProjects.map((p) => ({
+          id: p.id,
+          img: p.imageUrl,
+          title: p.title,
+          cat: p.category,
+          shortDesc: p.shortDesc,
+          fullDesc: p.fullDesc,
+          techs: p.techs,
+          features: p.features,
+          results: p.results,
+          siteUrl: p.siteUrl,
+          apkUrl: p.apkUrl,
+        }))
+      : staticProjects;
+
+  // Extract unique categories
+  const dynamicCategories = Array.from(new Set(projectsData.map((p) => p.cat)));
   const allCategoryLabel = lang === "fr" ? "Tous" : "All";
+  const categories = [allCategoryLabel, ...dynamicCategories];
 
-  const filteredProjects = (activeCategory === "Tous" || activeCategory === "All")
-    ? projectsData
-    : projectsData.filter((p) => p.cat === activeCategory);
+  const filteredProjects =
+    activeCategory === "Tous" || activeCategory === "All"
+      ? projectsData
+      : projectsData.filter((p) => p.cat === activeCategory);
 
   return (
     <section id="projets" className="relative py-24 md:py-32" aria-label="Nos réalisations">
@@ -236,14 +261,25 @@ export function Projects() {
         {/* Filtres de catégorie de projets */}
         <div className="mt-8 flex flex-wrap items-center gap-2">
           {categories.map((cat) => {
-            const label = (cat === "Tous" || cat === "All")
-              ? (lang === "fr" ? "Tous les projets" : "All Projects")
-              : cat;
-            const isActive = activeCategory === cat || ((cat === "Tous" || cat === "All") && (activeCategory === "Tous" || activeCategory === "All"));
+            const label =
+              cat === "Tous" || cat === "All"
+                ? lang === "fr"
+                  ? "Tous les projets"
+                  : "All Projects"
+                : cat;
+            const isActive =
+              activeCategory === cat ||
+              ((cat === "Tous" || cat === "All") &&
+                (activeCategory === "Tous" || activeCategory === "All"));
+
             return (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat === "Tous" || cat === "All" ? allCategoryLabel : cat)}
+                onClick={() =>
+                  setActiveCategory(
+                    cat === "Tous" || cat === "All" ? allCategoryLabel : cat
+                  )
+                }
                 className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
                   isActive
                     ? "bg-brand text-brand-foreground shadow-md"
@@ -272,7 +308,7 @@ export function Projects() {
               aria-label={`Voir les détails du projet ${p.title}`}
               className="project-card group relative cursor-pointer overflow-hidden rounded-3xl border border-border bg-surface text-left transition-all duration-300 hover:border-brand/50 hover:shadow-[0_8px_40px_-12px_oklch(0.85_0.17_90/0.15)] focus:outline-none focus:ring-2 focus:ring-brand"
             >
-              <div className="aspect-[16/10] overflow-hidden">
+              <div className="aspect-[16/10] overflow-hidden bg-muted">
                 <img
                   src={p.img}
                   alt={`Capture d'écran du projet ${p.title}`}
@@ -357,58 +393,76 @@ export function Projects() {
               </DialogHeader>
 
               <div className="mt-4 space-y-6">
+                {/* Image */}
+                {selectedProject.img && (
+                  <div className="overflow-hidden rounded-2xl border border-border aspect-[16/9]">
+                    <img
+                      src={selectedProject.img}
+                      alt={selectedProject.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
 
                 {/* Liste des fonctionnalités clés */}
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {t.projects.keyFeatures}
-                  </h4>
-                  <div className="mt-3 grid gap-2.5">
-                    {selectedProject.features.map((feat) => (
-                      <div
-                        key={feat}
-                        className="flex items-start gap-2.5 rounded-xl border border-border bg-surface p-3 text-xs text-foreground"
-                      >
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-brand mt-0.5" />
-                        <span className="leading-relaxed">{feat}</span>
-                      </div>
-                    ))}
+                {selectedProject.features && selectedProject.features.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {t.projects.keyFeatures}
+                    </h4>
+                    <div className="mt-3 grid gap-2.5">
+                      {selectedProject.features.map((feat) => (
+                        <div
+                          key={feat}
+                          className="flex items-start gap-2.5 rounded-xl border border-border bg-surface p-3 text-xs text-foreground"
+                        >
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-brand mt-0.5" />
+                          <span className="leading-relaxed">{feat}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {t.projects.aboutProject}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground">
-                    {selectedProject.fullDesc}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {t.projects.techUsed}
-                  </h4>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {selectedProject.techs.map((tech) => (
-                      <span
-                        key={tech}
-                        className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium text-foreground"
-                      >
-                        <Layers className="h-3 w-3 text-brand" /> {tech}
-                      </span>
-                    ))}
+                {selectedProject.fullDesc && (
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {t.projects.aboutProject}
+                    </h4>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground">
+                      {selectedProject.fullDesc}
+                    </p>
                   </div>
-                </div>
+                )}
 
-                <div className="rounded-xl border border-brand/30 bg-brand/5 p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand">
-                    <Sparkles className="h-4 w-4" /> {t.projects.impact}
+                {selectedProject.techs && selectedProject.techs.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {t.projects.techUsed}
+                    </h4>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {selectedProject.techs.map((tech) => (
+                        <span
+                          key={tech}
+                          className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium text-foreground"
+                        >
+                          <Layers className="h-3 w-3 text-brand" /> {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p className="mt-1 text-sm font-medium text-foreground">
-                    {selectedProject.results}
-                  </p>
-                </div>
+                )}
+
+                {selectedProject.results && (
+                  <div className="rounded-xl border border-brand/30 bg-brand/5 p-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand">
+                      <Sparkles className="h-4 w-4" /> {t.projects.impact}
+                    </div>
+                    <p className="mt-1 text-sm font-medium text-foreground">
+                      {selectedProject.results}
+                    </p>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                   <div className="flex items-center gap-2">

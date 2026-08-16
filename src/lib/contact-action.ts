@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import prisma from "@/lib/prisma";
 import { analyzeProjectIdea } from "./ai-service";
 
 export const contactSchema = z.object({
@@ -17,6 +18,21 @@ export const submitContactForm = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     console.log("[SERVER] Nouveau message de contact reçu :", data);
+
+    try {
+      await prisma.contactMessage.create({
+        data: {
+          name: data.name,
+          email: data.email,
+          company: data.company || null,
+          service: data.service || null,
+          budget: data.budget || null,
+          message: data.message,
+        },
+      });
+    } catch (dbErr) {
+      console.error("[SERVER] Erreur d'enregistrement DB :", dbErr);
+    }
 
     // Feature 3 IA: Auto-Qualification et Analyse par l'IA
     let aiBrief = null;

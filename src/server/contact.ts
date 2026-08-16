@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import prisma from "@/lib/prisma";
 
 export const contactSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
@@ -15,11 +16,26 @@ export type ContactFormData = z.infer<typeof contactSchema>;
 export const submitContactForm = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
-    // Log the contact submission on server
     console.log("[SERVER] Nouveau message de contact reçu :", data);
 
     try {
-      // Intégration Web3Forms / Resend si une clé d'API est configurée, sinon sauvegarde sécurisée
+      // 1. Sauvegarde dans la base de données
+      await prisma.contactMessage.create({
+        data: {
+          name: data.name,
+          email: data.email,
+          company: data.company || null,
+          service: data.service || null,
+          budget: data.budget || null,
+          message: data.message,
+        },
+      });
+    } catch (dbErr) {
+      console.error("[SERVER] Erreur d'enregistrement DB du message de contact :", dbErr);
+    }
+
+    try {
+      // 2. Intégration Web3Forms si configuré
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -36,12 +52,12 @@ export const submitContactForm = createServerFn({ method: "POST" })
         return { success: true, message: "Votre message a été envoyé avec succès !" };
       }
     } catch (err) {
-      console.warn("[SERVER] Fallback d'envoi mail local utilisé :", err);
+      console.warn("[SERVER] Fallback d'envoi mail utilisé :", err);
     }
 
-    // Réponse de succès de fallback
     return {
       success: true,
       message: "Votre message a bien été pris en compte. Notre équipe vous recontacte sous 24h.",
     };
   });
+
