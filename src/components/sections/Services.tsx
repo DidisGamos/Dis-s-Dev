@@ -56,7 +56,7 @@ export function Services() {
         }));
 
   return (
-    <section id="services" className="relative py-24 md:py-32" aria-label="Nos services">
+    <section id="services" className="relative py-16 md:py-20" aria-label="Nos services">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{t.services.badge}</p>

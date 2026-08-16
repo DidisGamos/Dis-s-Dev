@@ -235,7 +235,7 @@ export function Projects() {
       : projectsData.filter((p) => p.cat === activeCategory);
 
   return (
-    <section id="projets" className="relative py-24 md:py-32" aria-label="Nos réalisations">
+    <section id="projets" className="relative py-16 md:py-20" aria-label="Nos réalisations">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-2xl">

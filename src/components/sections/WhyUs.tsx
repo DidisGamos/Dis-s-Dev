@@ -83,7 +83,7 @@ export function WhyUs() {
       : t.whyUs.metrics;
 
   return (
-    <section id="apropos" className="relative py-24 md:py-32" aria-label="Pourquoi nous choisir">
+    <section id="apropos" className="relative py-16 md:py-20" aria-label="Pourquoi nous choisir">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-14 lg:grid-cols-2 lg:items-center">

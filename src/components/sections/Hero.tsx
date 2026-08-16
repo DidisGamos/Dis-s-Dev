@@ -16,7 +16,7 @@ export function Hero() {
   return (
     <section
       id="accueil"
-      className="relative isolate overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32"
+      className="relative isolate overflow-hidden pt-28 pb-16 md:pt-36 md:pb-20"
       aria-label="Section d'accueil"
     >
       {/* Background image + overlays avec parallaxe */}

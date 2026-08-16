@@ -6,7 +6,7 @@ export function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="border-t border-border py-12" aria-label="Pied de page">
+    <footer className="border-t border-border py-8" aria-label="Pied de page">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
         <div>
           <Logo />
@@ -34,16 +34,10 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} {t.footer.rights}
           </p>
-          <a
-            href="/admin"
-            className="text-[11px] text-muted-foreground/60 transition-colors hover:text-brand hover:underline"
-          >
-            Admin
-          </a>
         </div>
       </div>
     </footer>

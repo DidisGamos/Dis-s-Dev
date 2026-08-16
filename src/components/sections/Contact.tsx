@@ -84,7 +84,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 md:py-32" aria-label="Contact et devis">
+    <section id="contact" className="relative py-16 md:py-20" aria-label="Contact et devis">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>

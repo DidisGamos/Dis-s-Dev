@@ -22,7 +22,7 @@ export function Testimonials() {
       : t.testimonials.items;
 
   return (
-    <section id="temoignages" className="relative py-24 md:py-32" aria-label="Avis et témoignages clients">
+    <section id="temoignages" className="relative py-16 md:py-20" aria-label="Avis et témoignages clients">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{t.testimonials.badge}</p>

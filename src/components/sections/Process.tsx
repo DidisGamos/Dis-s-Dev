@@ -16,7 +16,7 @@ export function Process() {
       : t.process.steps;
 
   return (
-    <section className="relative py-24 md:py-32" aria-label="Notre processus de travail">
+    <section className="relative py-16 md:py-20" aria-label="Notre processus de travail">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{t.process.badge}</p>
